@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-data@2.0.0/dist/tf-data.min.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.0.min.js"></script>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+        <style>
+            video {
+                object-fit: cover;
+            }
+            body {
+                background-color: lightyellow;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="overlay">
+            <div onclick="fecharOverlay()" id="fechar"></div>
+            <div id="armazenamento">
+                <div id="salvar_carregar_reposicionador">
+                    <div id="salvar_carregar_wrapper">
+                        <div id="salvar_div">
+                            <button onclick="saveGestures()" id="salvar" title="Salva somente a lista de gestos, sem salvar captura alguma">Salvar Lista de Gestos</button>
+                            <button onclick="saveModel()" id="salvar" title="Salva o sistema já treinado">Salvar Sistema Treinado</button>
+                        </div> 
+                        <div id="carregar_div">
+                            <div id="botoes_carregar_div">
+                                <button onclick="loadModel()" id="carregar" title="Carrega um sistema já treinado a partir dos três arquivos abaixo">Carregar Arquivos do Sistema</button>
+                                <button onclick="loadGestures()" id="carregar" title="Carrega somente a lista de gestos para treinamento">Carregar Lista de Gestos</button>
+                            </div>
+                            <div id="upload_div">
+                                <label for="json" id="upload_label" class="json">Selecione o arquivo "my-model.json"</label>
+                                <input type="file" accept=".json" id="json" name="json" onchange="alterarLabel('json')"> 
+                                <label for="gestures" id="upload_label" class="gestures">Selecione o arquivo "gestures.txt"</label>
+                                <input type="file" accept=".txt" id="gestures" name="gestures" onchange='loadGesturesFile(event)'> 
+                                <label for="weights" id="upload_label" class="weights">Selecione o arquivo "my-model.weights.bin"</label>
+                                <input type="file" accept=".bin" id="weights" name="weights" onchange="alterarLabel('weights')"> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id='introducao'>
+            <h3>Olá! Bem vindo ao Gester! <br>
+            Aqui você pode treinar o seu próprio sistema de reconhecimento de gestos e com os gestos que você quiser!</h3>
+            <video autoplay playsinline muted id="webcam" width="224" height="224"></video>
+        </div>
+        <div id="abaixo_introducao">
+            <div id="arquivo">
+                <button onclick="abrirOverlaySalvar()" id="salvamento">Salvar Sistema</button>
+                <button onclick="abrirOverlayCarregar()" id="carregamento">Carregar Sistema já Salvo</button>
+            </div>
+            <div id="addGesture_div">
+                <div id="inside_addGesture_div">
+                    <label for="textArea" id="addGestureLabel">Adicione um gesto na lista: </label>
+                    <input id="textArea" maxlength="20" placeholder="Exemplo: Joinha"></input>
+                    <button onclick="createNewGesture()" id="addGesture"> Adicionar Gesto </button>
+                    <script type="text/javascript">
+                        document.getElementById('textArea').onkeydown = function(e){
+                            if(e.keyCode == 13 && this.value.match(/^ *$/) === null){
+                                createNewGesture();
+                            }
+                        };  
+                    </script>
+                </div>    
+            </div>
+            <h3 id="lista_gestos">LISTA DE GESTOS</h3>
+            <h4 id="como_adicionar">(Capture exemplos apertando o botão com o nome correspondente ao gesto feito)</h4>
+            <div id="buttonArea">
+                <div id="gestureButton">
+                    <button onclick="captureSample(0)" id="PlanoDeFundo">Plano de Fundo</button>
+                </div>
+            </div>
+            <div id="treinar_status_div">
+                <button onclick="train()" id="treinar">Treinar Sistema</button>
+                <h1 id="status">Carregando...</h1>     
+            </div>
+        </div>
+        <script type="text/javascript" src="code.js"></script>
+        </body>
+</html>
